@@ -258,8 +258,9 @@ class Levoit : public Component, public uart::UARTDevice {
   bool timer_active_{true};
   bool timer_stop_pending_{false};  // poll requestTimerStatus until MCU confirms off
   uint32_t timer_stop_sent_at_{0};  // millis() when stop was sent, for polling delay
-  bool wifi_led_solid_{false};
-  bool wifi_led_blink_sent_{false};  // true after first blinking command sent during boot
+  enum class WifiLedState : uint8_t { UNKNOWN, OFF, BLINKING, SOLID };
+  WifiLedState wifi_led_state_{WifiLedState::UNKNOWN};
+  bool mcu_seen_{false};  // set on first valid RX frame from MCU
 
   // Superior 6000S ESP-managed timer state
   bool esp_timer_active_{false};
